@@ -92,11 +92,16 @@ terraform {
   required_version = ">= 1.8.5"
 }
 
+variable "aws_access_key" {}
+variable "aws_secret_key" {}
+variable "aws_session_token" {}
+variable "public_key" {}
+
 provider "aws" {
-  access_key = "ASIA2NBKA2BDHIWG6U6K"
-  secret_key = "8DRPJ0WFLK0gAjcbNDDeUq327GfU4+PxSMri9a6K"
-  token      = "IQoJb3JpZ2luX2VjECoaCXVzLXdlc3QtMiJIMEYCIQDk58qFtBa/F+HrDkYPl2o5iyeWZXZ7HBKp6XfzS3hd4wIhAIV62zR9ZuZ3x+wqEJYvZrWwdX9vj98vUMqGoAOlzLRgKrwCCOP//////////wEQABoMNzE1MjAwMTg4NDg2IgwBVcpkLAePWN+ab7IqkAJ9gZ9XBf3GzEl4g/2LDQvylBH8p8zpDV5nfy05hm0tPSWaB6YTXQgdBrSSRFj6c1cqYIjjRwWjtXets1su2VDFkMMViyaNtDyhYUWJmnb4rFqe1LCc6AIG1LVoc5TcBAwE9voISgLtj64IHoUiDSQ36H3N3l2LPPOoWKwJs7SEQwJcLu7IZ7gOfbJwG1mu+DIPgeNF5bSE5i0j2/cR4EYxSIhRsTkw0oCs9kuTk737eZa2EyUVTDVMtJvYqQAu1IMVAOGplARiXgTqUKxcH3PdfgXyPjWu5Tniy5xK8x0u8e5J6YT09ivnq4k6R0i2Zi6uGc4i4hCk2KUVSGvmK6HBtRt91FxVOv2XkFPDXr4xqzCW3Ke0BjqcAc1jyJsUkWzKisjgQaHVZIHkpHvzK+KkRBE/oE/2kqqXkQaPiTSzGnSbFOKbf/hQ8EC5fyNY9VKFIcNA/RCXOMQcg/h7BoWrMv0pDSVnwnJ2xozseNE7ZnHUcrwRGZV5KapdkdTpyDuYb10Vis3CrCpbVKoJN3onzgwfpVKbU18FaYfpB6+MhwUM+0FYndox2tsGw50PKQy4EjdQDg=="
-  region    = "us-east-1"
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
+  token      = var.aws_session_token
+  region     = "us-east-1"
 }
 
 # VPC
@@ -190,7 +195,7 @@ resource "aws_ecs_service" "service" {
 # Key Pair
 resource "aws_key_pair" "deployer_key" {
   key_name   = "deployer-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5KTCB/3CPgtaNOFCyfmGy5SKmykLhNEYs5WygYCyt4bY4E+/r4h86/dpACYHgK2lkTAn32jkh6j9AcwAGwTfzVnX1wdY8Qw93LyGyN2is3x0kdZh0zpVbL0mqs2T8K4LO/1Dm3td9Gj/Lt/MtCP/ww40p4u7ia1xQDbYvSt45fiv1a83UfgCMJASzxI4CXl0CuL5QNq3n5L3binVa4m4cnxz5+6dleaKPE91iV1RgVKs1zG08Tc3VszAWQ9DZ/p8d7v178DRLiIiZRZCM64V8q4vHxfVlWjc6Ap91X+zd2eA5AADq9dSrSokTDWq8kHkGfD8Bg7mW1sIeQ7PRX9uz joaquin banchero@DESKTOP-4I9PHVS"
+  public_key = var.public_key
   tags = {
     Name = "Deployer Key Pair"
   }
