@@ -92,8 +92,6 @@ terraform {
   required_version = ">= 1.8.5"
 }
 
-
-
 provider "aws" {
   access_key = "ASIA2NBKA2BDHIWG6U6K"
   secret_key = "8DRPJ0WFLK0gAjcbNDDeUq327GfU4+PxSMri9a6K"
