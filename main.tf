@@ -92,18 +92,13 @@ terraform {
   required_version = ">= 1.8.5"
 }
 
-variable "aws_access_key" {}
-variable "aws_secret_key" {}
-variable "aws_session_token" {}
-variable "aws_region" {
-  default = "us-east-1"
-}
+
 
 provider "aws" {
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
-  token      = var.aws_session_token
-  region     = var.aws_region
+  access_key = "ASIA2NBKA2BDHIWG6U6K"
+  secret_key = "8DRPJ0WFLK0gAjcbNDDeUq327GfU4+PxSMri9a6K"
+  token      = "IQoJb3JpZ2luX2VjECoaCXVzLXdlc3QtMiJIMEYCIQDk58qFtBa/F+HrDkYPl2o5iyeWZXZ7HBKp6XfzS3hd4wIhAIV62zR9ZuZ3x+wqEJYvZrWwdX9vj98vUMqGoAOlzLRgKrwCCOP//////////wEQABoMNzE1MjAwMTg4NDg2IgwBVcpkLAePWN+ab7IqkAJ9gZ9XBf3GzEl4g/2LDQvylBH8p8zpDV5nfy05hm0tPSWaB6YTXQgdBrSSRFj6c1cqYIjjRwWjtXets1su2VDFkMMViyaNtDyhYUWJmnb4rFqe1LCc6AIG1LVoc5TcBAwE9voISgLtj64IHoUiDSQ36H3N3l2LPPOoWKwJs7SEQwJcLu7IZ7gOfbJwG1mu+DIPgeNF5bSE5i0j2/cR4EYxSIhRsTkw0oCs9kuTk737eZa2EyUVTDVMtJvYqQAu1IMVAOGplARiXgTqUKxcH3PdfgXyPjWu5Tniy5xK8x0u8e5J6YT09ivnq4k6R0i2Zi6uGc4i4hCk2KUVSGvmK6HBtRt91FxVOv2XkFPDXr4xqzCW3Ke0BjqcAc1jyJsUkWzKisjgQaHVZIHkpHvzK+KkRBE/oE/2kqqXkQaPiTSzGnSbFOKbf/hQ8EC5fyNY9VKFIcNA/RCXOMQcg/h7BoWrMv0pDSVnwnJ2xozseNE7ZnHUcrwRGZV5KapdkdTpyDuYb10Vis3CrCpbVKoJN3onzgwfpVKbU18FaYfpB6+MhwUM+0FYndox2tsGw50PKQy4EjdQDg=="
+  region    = "us-east-1"
 }
 
 # VPC

@@ -7,7 +7,6 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:    
 
 jobs:
   terraform:
@@ -15,21 +14,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 'Checkout Repository'
+    - name: 'Checkout GitHub Actions'
       uses: actions/checkout@v2
 
     - name: 'Setup Terraform'
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: 1.0.0
-
-    - name: 'Configure AWS Credentials'
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-        aws-region: ${{ secrets.AWS_REGION }
+        terraform_version: 1.8.5
 
     - name: 'Terraform Init'
       run: terraform init
@@ -38,10 +29,10 @@ jobs:
       run: terraform validate
 
     - name: 'Terraform Plan'
-      run: terraform plan -out=planfile
+      run: terraform plan
 
     - name: 'Terraform Apply'
-      run: terraform apply -auto-approve planfile
+      run: terraform apply -auto-approve
 
     - name: 'Upload Terraform Plan'
       if: failure()
