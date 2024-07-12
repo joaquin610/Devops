@@ -1,4 +1,3 @@
-//new
 terraform {
   required_providers {
     aws = {
@@ -103,6 +102,7 @@ resource "aws_ecs_service" "service" {
     security_groups = [aws_security_group.allow_http.id]
     assign_public_ip = true
   }
+  force_new_deployment = true
   tags = {
     Name   = element(["BE_Orders_Service", "BE_Shipping_Service", "BE_Products_Service", "BE_Payments_Service"], count.index)
     Origin = "Terraform"
@@ -116,6 +116,9 @@ resource "aws_key_pair" "deployer_key" {
   tags = {
     Name = "Deployer Key Pair"
   }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 # S3 Bucket
@@ -124,9 +127,4 @@ resource "aws_s3_bucket" "FE_react" {
   tags = {
     Name = "FE_react"
   }
-}
-
-resource "aws_s3_bucket_acl" "fe_react_acl" {
-  bucket = aws_s3_bucket.FE_react.id
-  acl    = "private"
 }
