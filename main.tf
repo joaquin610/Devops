@@ -203,10 +203,8 @@ resource "aws_key_pair" "deployer_key" {
 
 # S3 Bucket
 resource "aws_s3_bucket" "FE_react" {
-  bucket = "FE_react"
+  bucket = "fe-react-bucket"
   acl    = "private"
-
-
   tags = {
     Name = "FE_react"
   }
