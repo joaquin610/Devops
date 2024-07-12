@@ -175,8 +175,8 @@ resource "aws_ecs_task_definition" "task" {
 
 # ECS Service
 resource "aws_ecs_service" "service" {
-  count            = 5
-  name             = element(["BE_Orders_Service", "BE_Shipping_Service", "BE_Products_Service", "BE_Payments_Service", "FE_React"], count.index)
+  count            = 4
+  name             = element(["BE_Orders_Service", "BE_Shipping_Service", "BE_Products_Service", "BE_Payments_Service"], count.index)
   cluster          = aws_ecs_cluster.main.id
   task_definition  = aws_ecs_task_definition.task.arn
   desired_count    = 1
@@ -187,7 +187,7 @@ resource "aws_ecs_service" "service" {
     assign_public_ip = true
   }
   tags = {
-    Name   = element(["BE_Orders_Service", "BE_Shipping_Service", "BE_Products_Service", "BE_Payments_Service", "FE_React"], count.index)
+    Name   = element(["BE_Orders_Service", "BE_Shipping_Service", "BE_Products_Service", "BE_Payments_Service"], count.index)
     Origin = "Terraform"
   }
 }
@@ -198,5 +198,16 @@ resource "aws_key_pair" "deployer_key" {
   public_key = var.public_key
   tags = {
     Name = "Deployer Key Pair"
+  }
+}
+
+# S3 Bucket
+resource "aws_s3_bucket" "FE_react" {
+  bucket = "FE_react"
+  acl    = "private"
+
+
+  tags = {
+    Name = "FE_react"
   }
 }
