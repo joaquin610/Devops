@@ -129,3 +129,41 @@ resource "aws_s3_bucket" "FE_react" {
     Name = "FE_react"
   }
 }
+
+# resource "aws_s3_bucket_public_access_block" "FE_react" {
+#   bucket = aws_s3_bucket.FE_react.id
+
+#   block_public_acls       = false
+#   block_public_policy     = false
+#   ignore_public_acls      = false
+#   restrict_public_buckets = false
+# }
+
+resource "aws_ecr_repository" "orders_repo" {
+  name = "orders-service-repo"
+  tags = {
+    Name = "Orders Service Repo"
+  }
+}
+
+resource "aws_ecr_repository" "shipping_repo" {
+  name = "shipping-service-repo"
+  tags = {
+    Name = "Shipping Service Repo"
+  }
+}
+
+
+resource "aws_ecr_repository" "products_repo" {
+  name = "products-service-repo"
+  tags = {
+    Name = "Products Service Repo"
+  }
+}
+
+resource "aws_ecr_repository" "payments_repo" {
+  name = "payments-service-repo"
+  tags = {
+    Name = "Payments Service Repo"
+  }
+}
