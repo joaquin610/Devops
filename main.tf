@@ -66,57 +66,8 @@ resource "aws_ecs_cluster" "main" {
 }
 
 # ECS Task Definition 
-# resource "aws_ecs_task_definition" "task" {
-#   family                   = "service"
-#   container_definitions    = jsonencode([
-#     {
-#       name  = "app"
-#       image = "amazon/amazon-ecs-sample"
-#       memory = 256
-#       cpu    = 256
-#       essential = true
-#       portMappings = [
-#         {
-#           containerPort = 80
-#           hostPort      = 80
-#         }
-#       ]
-#     }
-#   ])
-#   requires_compatibilities = ["FARGATE"]
-#   network_mode             = "awsvpc"
-#   cpu                      = "256"
-#   memory                   = "512"
-# }
-
-//probando
-resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecsTaskExecutionRole"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "ecs-tasks.amazonaws.com"
-        }
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
-  tags = {
-    Name = "ecsTaskExecutionRole"
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
-  role       = aws_iam_role.ecs_task_execution_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-
 resource "aws_ecs_task_definition" "task" {
   family                   = "service"
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions    = jsonencode([
     {
       name  = "app"
@@ -137,8 +88,6 @@ resource "aws_ecs_task_definition" "task" {
   cpu                      = "256"
   memory                   = "512"
 }
-
-//probando
 
 # ECS Service
 resource "aws_ecs_service" "service" {
@@ -168,7 +117,7 @@ resource "aws_key_pair" "deployer_key" {
     Name = "Deployer Key Pair"
   }
   lifecycle {
-    prevent_destroy = true
+    create_before_destroy = true
   }
 }
 
