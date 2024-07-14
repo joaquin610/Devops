@@ -20,6 +20,7 @@ provider "aws" {
   region     = "us-east-1"
 }
 
+
 # VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
@@ -118,6 +119,7 @@ resource "aws_key_pair" "deployer_key" {
   }
   lifecycle {
     create_before_destroy = true
+    ignore_changes        = [public_key]
   }
 }
 
@@ -127,6 +129,9 @@ resource "aws_s3_bucket" "FE_react" {
   acl    = "private"
   tags = {
     Name = "FE_react"
+  }
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
@@ -152,7 +157,6 @@ resource "aws_ecr_repository" "shipping_repo" {
     Name = "Shipping Service Repo"
   }
 }
-
 
 resource "aws_ecr_repository" "products_repo" {
   name = "products-service-repo"

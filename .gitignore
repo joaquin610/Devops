@@ -1,0 +1,8 @@
+# Terraform files to ignore
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+
+# If you are using local variables
+*.tfvars
+*.tfvars.json
