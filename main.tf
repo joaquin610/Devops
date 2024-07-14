@@ -131,9 +131,6 @@ resource "aws_s3_bucket" "FE_react" {
   tags = {
     Name = "FE_react"
   }
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 # resource "aws_s3_bucket_public_access_block" "FE_react" {
