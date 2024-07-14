@@ -170,9 +170,3 @@ resource "aws_ecr_repository" "payments_repo" {
   }
 }
 
-resource "aws_ecr_repository" "payments_borrar" {
-  name = "payments-service-borrar"
-  tags = {
-    Name = "Payments Service borrar"
-  }
-}
