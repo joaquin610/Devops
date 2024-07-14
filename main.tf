@@ -111,17 +111,17 @@ resource "aws_ecs_service" "service" {
 }
 
 # Key Pair
-resource "aws_key_pair" "deployer_key" {
-  key_name   = "deployer-key"
-  public_key = var.public_key
-  tags = {
-    Name = "Deployer Key Pair"
-  }
-  lifecycle {
-    create_before_destroy = true
-    ignore_changes        = [public_key]
-  }
-}
+# resource "aws_key_pair" "deployer_key" {
+#   key_name   = "deployer-key"
+#   public_key = var.public_key
+#   tags = {
+#     Name = "Deployer Key Pair"
+#   }
+#   lifecycle {
+#     create_before_destroy = true
+#     ignore_changes        = [public_key]
+#   }
+# }
 
 # S3 Bucket
 resource "aws_s3_bucket" "FE_react" {
