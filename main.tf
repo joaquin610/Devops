@@ -8,9 +8,18 @@ terraform {
   required_version = ">= 1.8.5"
 }
 
-variable "aws_access_key" {}
-variable "aws_secret_key" {}
-variable "aws_session_token" {}
+variable "aws_access_key" {
+  description = "AWS access key"
+}
+
+variable "aws_secret_key" {
+  description = "AWS secret key"
+}
+
+variable "aws_session_token" {
+  description = "AWS session token"
+}
+
 variable "public_key" {}
 
 provider "aws" {
@@ -28,13 +37,23 @@ resource "aws_vpc" "main" {
   }
 }
 
-# Subnet
+# Subnet 1
 resource "aws_subnet" "subnet1" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-1a"
   tags = {
     Name = "Subnet 1"
+  }
+}
+
+# Subnet 2
+resource "aws_subnet" "subnet2" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.2.0/24"
+  availability_zone = "us-east-1b"
+  tags = {
+    Name = "Subnet 2"
   }
 }
 
@@ -95,7 +114,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.allow_http.id]
-  subnets            = [aws_subnet.subnet1.id]
+  subnets            = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
   
   tags = {
     Name = "ecs-alb"
@@ -120,7 +139,8 @@ resource "aws_lb_target_group" "app" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
-  
+  target_type = "ip"  # Tipo de target actualizado
+
   health_check {
     path                = "/"
     interval            = 30
@@ -145,7 +165,7 @@ resource "aws_ecs_service" "service" {
   launch_type      = "FARGATE"
 
   network_configuration {
-    subnets         = [aws_subnet.subnet1.id]
+    subnets         = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
     security_groups = [aws_security_group.allow_http.id]
     assign_public_ip = true
   }
