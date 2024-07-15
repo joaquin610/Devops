@@ -20,8 +20,6 @@ provider "aws" {
   region     = "us-east-1"
 }
 
-
-
 # VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
@@ -91,7 +89,53 @@ resource "aws_ecs_task_definition" "task" {
   memory                   = "512"
 }
 
-# ECS Service
+# Application Load Balancer (ALB)
+resource "aws_lb" "alb" {
+  name               = "ecs-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.allow_http.id]
+  subnets            = [aws_subnet.subnet1.id]
+  
+  tags = {
+    Name = "ecs-alb"
+  }
+}
+
+# ALB Listener
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type = "forward"
+    target_group_arn = aws_lb_target_group.app.arn
+  }
+}
+
+# ALB Target Group
+resource "aws_lb_target_group" "app" {
+  name     = "ecs-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.main.id
+  
+  health_check {
+    path                = "/"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 5
+    unhealthy_threshold = 2
+    matcher             = "200-399"
+  }
+
+  tags = {
+    Name = "ecs-tg"
+  }
+}
+
+# ECS Service updated to include ALB
 resource "aws_ecs_service" "service" {
   count            = 4
   name             = element(["BE_Orders_Service", "BE_Shipping_Service", "BE_Products_Service", "BE_Payments_Service"], count.index)
@@ -99,11 +143,19 @@ resource "aws_ecs_service" "service" {
   task_definition  = aws_ecs_task_definition.task.arn
   desired_count    = 1
   launch_type      = "FARGATE"
+
   network_configuration {
     subnets         = [aws_subnet.subnet1.id]
     security_groups = [aws_security_group.allow_http.id]
     assign_public_ip = true
   }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.app.arn
+    container_name   = "app"
+    container_port   = 80
+  }
+
   force_new_deployment = true
   tags = {
     Name   = element(["BE_Orders_Service", "BE_Shipping_Service", "BE_Products_Service", "BE_Payments_Service"], count.index)
@@ -169,4 +221,3 @@ resource "aws_ecr_repository" "payments_repo" {
     Name = "Payments Service Repo"
   }
 }
-
