@@ -31,6 +31,8 @@ provider "aws" {
 
 
 
+
+
 # VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
@@ -73,12 +75,12 @@ resource "aws_subnet" "subnet1" {
 }
 
 # Subnet 2
-resource "aws_subnet" "subnet3" {
+resource "aws_subnet" "subnet2" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.3.0/24"
+  cidr_block        = "10.0.2.0/24"
   availability_zone = "us-east-1b"
   tags = {
-    Name = "Subnet 3"
+    Name = "Subnet 2"
   }
 }
 
@@ -88,8 +90,8 @@ resource "aws_route_table_association" "subnet1" {
   route_table_id = aws_route_table.public.id
 }
 
-resource "aws_route_table_association" "subnet3" {
-  subnet_id      = aws_subnet.subnet3.id
+resource "aws_route_table_association" "subnet2" {
+  subnet_id      = aws_subnet.subnet2.id
   route_table_id = aws_route_table.public.id
 }
 
@@ -150,7 +152,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.allow_http.id]
-  subnets            = [aws_subnet.subnet1.id, aws_subnet.subnet3.id]
+  subnets            = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
   
   tags = {
     Name = "ecs-alb"
@@ -201,7 +203,7 @@ resource "aws_ecs_service" "service" {
   launch_type      = "FARGATE"
 
   network_configuration {
-    subnets         = [aws_subnet.subnet1.id, aws_subnet.subnet3.id]
+    subnets         = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
     security_groups = [aws_security_group.allow_http.id]
     assign_public_ip = true
   }
